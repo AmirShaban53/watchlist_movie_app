@@ -30,18 +30,15 @@ const MovieModal = ({movie}) => {
                                         <div className='my-4'>
                                             <span>RATED: </span><span>{movie.vote_average}/10</span>
                                         </div>
-                                        <div className='my-4'>
+                                        {movie.media_type && <div className='my-4'>
                                             <span>TYPE: </span><span>{movie.media_type}</span>
-                                        </div>
-                                        {/* <div className='my-4'>
-                                            <button className='btn btn-danger' >add </button>
-                                        </div> */}
+                                        </div>}
                                     </div>
                                 </div>
                             </div>
                             <div className="container">
                                 <div className="row">
-                                    <h2>plot</h2>
+                                    <h2 className='text-danger'>plot</h2>
                                     <p>
                                         {movie.overview}
                                     </p>

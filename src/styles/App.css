@@ -17,6 +17,18 @@ body{
 .d{
     border: 2px solid red !important;
 }
+.dropdown-menu{
+    height: 300px !important;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.dropdown-menu::-webkit-scrollbar{
+    display: none;
+}
+.dropdown-item:hover{
+    background-color: red !important;
+}
 .movies{
     overflow-x: auto;
     flex-wrap: nowrap;

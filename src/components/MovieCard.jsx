@@ -1,12 +1,11 @@
-import React, {useContext} from 'react';
-import 'dotenv/config';
-import { MovieContext } from '../App';
+import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const MovieCard = ({movie}) => {
+const MovieCard = ({movie, selectMovie, addToWatch}) => {
     const IMG_URL = process.env.REACT_APP_IMG_URL;
     const imgUrl = `${IMG_URL}/w300/${movie.poster_path}`;
-    const { selectMovie, addToWatch } =useContext(MovieContext);
+
+    
     return (
         <div className='col m-2'>
             <div className='position-relative overflow-hidden '>

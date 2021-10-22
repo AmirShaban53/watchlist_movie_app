@@ -8,6 +8,7 @@ import WatchList from './components/WatchList';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Banner from './components/Banner';
+import Dropdown from './components/Dropdown';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle';
@@ -19,13 +20,18 @@ library.add(fas);
 export const MovieContext = React.createContext();
 
 function App() {
-  const [watchList, setWatchList]= useState([]);
-  const [movieList, setMovieList]= useState([]);
+  const [genres, setGenres] = useState([]);
   const [bannerMovie, setBannerMovie]= useState({});
   const [searchValue, setSearchValue] = useState('');
+  const [selectedMovie, setSelectedMovie] = useState({});
+  const [selectedGenre, setSelectedGenre] = useState({});
+  
+  //row lists
   const [trendingList, setTrendingList]= useState([]);
   const [topRatedList, setTopRatedList]= useState([]);
-  const [selectedMovie, setSelectedMovie] = useState({});
+  const [ByGenreList, setByGenreList]= useState([]);
+  const [movieList, setMovieList]= useState([]);
+  const [watchList, setWatchList]= useState([]);
 
   const LOCAL_KEY = process.env.REACT_APP_LOCAL_KEY;
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -43,30 +49,29 @@ function App() {
       console.log(error);
     }
   }
-  const selectMovie =(id) => {
-    
-      if(searchValue){
-        const selected = movieList.filter(movie => movie.id === id);
-        setSelectedMovie(selected[0]);
-      }
-      else{
-        const test =trendingList.filter(movie=>movie.id === id);
-        if(test.length >= 1){
-          const selected = trendingList.filter(movie => movie.id === id);
-          setSelectedMovie(selected[0]);
-        }
-        else if(test.length === 0){
-          const selected = topRatedList.filter(movie => movie.id === id);
-          setSelectedMovie(selected[0]);
-        }
-      }
-    
-  }
   const selectWatch =  (id) => {
         const selected = watchList.filter(movie => movie.id === id);
         setSelectedMovie(selected[0]);
   }
-
+  const selectGenre = (id) => {
+    const selected = genres.filter(genre => genre.id === id);
+    console.log(selected[0]);
+    setSelectedGenre(selected[0]);
+  }
+  const getGenresList = async() => {
+    try {
+      const url = `${BASE_URL}/genre/movie/list?api_key=${API_KEY}&language=en-US`
+      const genres = await axios.get(url);
+      if(genres.data.genres)
+      {
+        setGenres(genres.data.genres);
+        setSelectedGenre(genres.data.genres[Math.floor(Math.random()*genres.data.genres.length)])
+      }
+    } 
+    catch (error) {
+      console.log(error);
+    }
+  }
   const getTrendingList = async() => {
     try {
       const url = `${BASE_URL}/trending/all/day?api_key=${API_KEY}`
@@ -75,6 +80,19 @@ function App() {
       {
         setTrendingList(trending.data.results);
         setBannerMovie(trending.data.results[Math.floor(Math.random()*trending.data.results.length)]);
+      }
+    } 
+    catch (error) {
+      console.log(error);
+    }
+  }
+  const getByGenreList = async() => {
+    try {
+      const url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&language=en-US&include_adult=false&page=1&with_genres=${selectedGenre.id}`
+      const trending = await axios.get(url);
+      if(trending.data.results)
+      {
+        setByGenreList(trending.data.results);
       }
     } 
     catch (error) {
@@ -94,28 +112,6 @@ function App() {
       console.log(error);
     }
   }
-  const addToWatch = async(id) => {
-    try {
-      if(searchValue){
-        const selected = movieList.filter(movie =>movie.id === id);
-        setWatchList(watch => [...watch, selected[0]]);
-      }
-      else{
-        const test =trendingList.filter(movie=>movie.id === id);
-        if(test.length >= 1){
-          const selected = trendingList.filter(movie => movie.id === id);
-          setWatchList(watch => [...watch, selected[0]]);
-        }
-        else if(test.length === 0){
-          const selected = topRatedList.filter(movie => movie.id === id);
-          setWatchList(watch => [...watch, selected[0]]);
-        }
-      }
-    } 
-    catch (error) {
-      console.log(error);
-    }
-  }
   const removeWatch = async(id) => {
     const newWatch = watchList.filter(watch => watch.id !== id);
     setWatchList(newWatch);
@@ -123,10 +119,12 @@ function App() {
 
   
   const contextValue = {
-    addToWatch,
     removeWatch,
-    selectMovie,
-    selectWatch
+    selectWatch,
+    selectGenre,
+    setSelectedMovie,
+    setWatchList,
+    watchList
   }
 
   useEffect(()=>{
@@ -135,9 +133,14 @@ function App() {
       setWatchList(JSON.parse(watchListJSON));
     }
     getTrendingList();
+    getGenresList();
     getTopRated();
   },[])
+  
+  useEffect(()=>{
+    getByGenreList();
 
+  },[selectedGenre])
 
   useEffect(()=>{
     getMovieList(searchValue);
@@ -151,12 +154,17 @@ function App() {
     <div className='container-fluid px-0'>
 
       <Navbar searchValue={searchValue} setSearchValue={setSearchValue}/>
-      {!searchValue && <Banner movie={bannerMovie}/>}
       <MovieContext.Provider value={contextValue}>
+        {!searchValue && <Banner movie={bannerMovie}/>}
         {!searchValue && 
           <div className='mx-3 '>
             <MovieList label={'trending'} movies={trendingList}/>
             <MovieList label={'top rated'} movies={topRatedList}/>
+            
+
+            <Dropdown genres={genres} selectedGenre={selectedGenre}/>
+                
+            <MovieList movies={ByGenreList}/>
           </div>
         }
         {searchValue && 
