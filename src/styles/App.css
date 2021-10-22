@@ -1,0 +1,26 @@
+@import url('./MovieCard.css');
+@import url('./Banner.css');
+@import url('./Navbar.css');
+
+body{
+    background-color: #1f1f1f !important;
+    color: white !important;
+}
+.dark{
+    background-color: #1f1f1f !important;
+    
+}
+.footer{
+    background-color: #131212 !important;
+    
+}
+.d{
+    border: 2px solid red !important;
+}
+.movies{
+    overflow-x: auto;
+    flex-wrap: nowrap;
+}
+.movies::-webkit-scrollbar{
+    display: none;
+}

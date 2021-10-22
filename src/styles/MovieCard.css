@@ -1,0 +1,30 @@
+.overlay{
+    background: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: 0.5s;
+    
+}
+.overlay .text{
+    position: absolute;
+    cursor: pointer;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: none;
+}
+.heart{
+    cursor: pointer !important;
+    transition: 0.5s ease;
+}
+.heart:hover{
+    color: red;
+}
+.overlay:hover{
+    opacity: 1;
+    transform: scale(1.1);
+}

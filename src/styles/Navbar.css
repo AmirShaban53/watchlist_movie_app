@@ -1,0 +1,11 @@
+.navbar{
+    width: 100% !important;
+    position: fixed !important;
+    top: 0 !important;
+    z-index: 1 !important;
+    transition: 0.5s ease !important;
+}
+
+.dark_navbar{
+    background-color: #1f1f1f !important;
+}
