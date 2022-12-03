@@ -40,7 +40,6 @@ const Navbar = ({searchValue, setSearchValue}) => {
                     </ul>
                 </div>
             </div>
-            
         </nav>
     )
 }

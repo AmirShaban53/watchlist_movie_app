@@ -7,9 +7,6 @@ const Banner = ({movie}) => {
     const imgUrl = `${IMG_URL}/original/${movie.backdrop_path}`;
     const bgImg = {backgroundImage: `url(${imgUrl})`}
 
-    // const selectMovie =() => {
-    //     setSelectedMovie(movie);
-    // }
     return (
         <div className='banner mb-3' style={bgImg}>
             <div className="container h-100 position-relative">
@@ -17,7 +14,6 @@ const Banner = ({movie}) => {
                     <div className="container ">
                         <div className="row ">
                             <div className="col-md-6">
-
                                 <h2 className='fw-bolder display-3'>
                                     {movie?.title || movie?.name || movie?.original_name}
                                 </h2>
@@ -31,7 +27,6 @@ const Banner = ({movie}) => {
                                     read more
                                 </label>
                             </div>
-
                         </div>
                     </div>
                 </div>
